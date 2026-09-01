@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { DatePicker } from '../common/DatePicker';
-import { Plus, Trash2, Award, BookOpen, Clock, FileCheck, Check, GraduationCap, Monitor, BarChart3, Calendar, Calculator } from 'lucide-react';
+import { Plus, Trash2, Award, BookOpen, Clock, FileCheck, Check, GraduationCap, Monitor, BarChart3, Calendar, Calculator, X } from 'lucide-react';
 import { calculateTeacherScore } from '../../services/scoringEngine';
 
 function calculatePeriodInfo(startDateStr, endDateStr) {
@@ -42,6 +42,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
   });
 
   const [calculatedPreview, setCalculatedPreview] = useState(0);
+  const [showCalcModal, setShowCalcModal] = useState(false);
+  const [calcStartDate, setCalcStartDate] = useState('');
+  const [calcEndDate, setCalcEndDate] = useState('');
 
   useEffect(() => {
     if (teacherToEdit) {
@@ -614,7 +617,24 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 </div>
               );
             })}
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (formData.regencias.length > 0) {
+                      const copy = [...formData.regencias];
+                      const lastIdx = copy.length - 1;
+                      copy[lastIdx].showCalculator = !copy[lastIdx].showCalculator;
+                      setFormData({ ...formData, regencias: copy });
+                    } else {
+                      setShowCalcModal(true);
+                    }
+                  }}
+                  className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                  title="Usar Calculadora de Período por Datas"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                </button>
                 <button
                   type="button"
                   onClick={addRegencia}
@@ -698,7 +718,15 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 </div>
               );
             })}
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowCalcModal(true)}
+                  className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                  title="Usar Calculadora de Datas"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                </button>
                 <button
                   type="button"
                   onClick={addPublicacao}
@@ -794,7 +822,15 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 </div>
               );
             })}
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowCalcModal(true)}
+                  className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                  title="Usar Calculadora de Datas"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                </button>
                 <button
                   type="button"
                   disabled={latoCount >= 4 && mestradoCount >= 2 && doutoradoCount >= 1}
@@ -943,7 +979,15 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 </div>
               );
             })}
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowCalcModal(true)}
+                  className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                  title="Usar Calculadora de Datas"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                </button>
                 <button
                   type="button"
                   onClick={addFormacaoPresencial}
@@ -1079,7 +1123,15 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 </div>
               );
             })}
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowCalcModal(true)}
+                  className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                  title="Usar Calculadora de Datas"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                </button>
                 <button
                   type="button"
                   onClick={addFormacaoEAD}
@@ -1110,6 +1162,90 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
       </form>
+
+      {/* MODAL CALCULADORA DE DATAS & PERÍODO */}
+      {showCalcModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in duration-150">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-5 max-w-md w-full space-y-4 text-slate-800 dark:text-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h3 className="text-sm font-bold flex items-center gap-2 text-[#003399] dark:text-blue-400">
+                <Calculator className="w-5 h-5" /> Calculadora de Período & Datas (Art. 2º, VI)
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCalcModal(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <p className="text-slate-600 dark:text-slate-300">
+                Informe a data inicial e final para calcular a contagem de dias e anos de serviço conforme a Portaria.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Data de Início *</label>
+                  <DatePicker
+                    value={calcStartDate}
+                    onChange={setCalcStartDate}
+                    minYear={1970}
+                    maxYear={2026}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Data de Fim *</label>
+                  <DatePicker
+                    value={calcEndDate}
+                    onChange={setCalcEndDate}
+                    minYear={1970}
+                    maxYear={2026}
+                  />
+                </div>
+              </div>
+
+              {(() => {
+                const info = calculatePeriodInfo(calcStartDate, calcEndDate);
+                if (!info) {
+                  return (
+                    <div className="p-3 bg-blue-50/70 dark:bg-blue-950/40 rounded-xl text-slate-500 dark:text-slate-400 italic text-[11px] border border-blue-100 dark:border-blue-900">
+                      💡 Selecione a data de início e a data de fim no calendário acima.
+                    </div>
+                  );
+                }
+                return (
+                  <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-xl space-y-2">
+                    <p className="font-bold text-[#006633] dark:text-emerald-300 text-xs">
+                      🗓️ Total do Período: {info.totalDays} dia(s) de trabalho
+                    </p>
+                    <p className="text-[11px] text-slate-700 dark:text-slate-300">
+                      Decomposição: {info.fullYears} ano(s) completo(s) + {info.remainingDays} dia(s) restante(s).
+                    </p>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-emerald-300 dark:border-emerald-700 flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white">Resultado para Cômputo:</span>
+                      <span className="text-sm font-black text-[#006633] dark:text-emerald-400">
+                        {info.finalYears} ano(s) {info.hasExtraYearBonus ? '(+1 ano extra)' : ''}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowCalcModal(false)}
+                className="px-4 py-2 bg-[#006633] hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer"
+              >
+                Fechar Calculadora
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Modal>
   );
 }
