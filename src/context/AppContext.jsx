@@ -343,7 +343,7 @@ export function AppProvider({ children }) {
   const schoolTurmas = turmas.filter((t) => t.escola_id === activeSchoolId);
   const schoolEscolhas = escolhas.filter((e) => e.escola_id === activeSchoolId);
 
-  const callQueueInfo = buildCallQueue(schoolProfessoresRaw, schoolEscolhas, abdicaramAlfaMais);
+  const callQueueInfo = buildCallQueue(schoolProfessoresRaw, schoolEscolhas, abdicaramAlfaMais, schoolTurmas);
 
   return (
     <AppContext.Provider

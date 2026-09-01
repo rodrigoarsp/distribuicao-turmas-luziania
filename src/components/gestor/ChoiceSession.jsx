@@ -44,7 +44,7 @@ export function ChoiceSession() {
   const [selectedNewTurmaId, setSelectedNewTurmaId] = useState('');
   const [isFinalizeConfirmOpen, setIsFinalizeConfirmOpen] = useState(false);
 
-  const { prioGroup, generalGroup, fullCallQueue, alreadyChosen } = callQueueInfo;
+  const { prioGroup, generalGroup, fullCallQueue, alreadyChosen, allAlfaMaisTaken } = callQueueInfo;
 
   const isConcluido = currentSchool?.status_processo === 'concluido';
   const currentPickingTeacher = fullCallQueue[0] || null;
@@ -168,6 +168,19 @@ export function ChoiceSession() {
             <span>
               <strong>Ajustes permitidos antes do encerramento:</strong> O gestor pode realizar a troca de turma de um professor ou excluir a escolha para liberá-la novamente.
             </span>
+          </div>
+        </div>
+      )}
+
+      {/* Aviso de Fila de Prioridade AlfaMais Finalizada */}
+      {allAlfaMaisTaken && (
+        <div className="bg-amber-500/10 border border-amber-500/40 p-3.5 rounded-2xl flex items-center gap-3 text-xs text-amber-800 dark:text-amber-300 shadow-xs">
+          <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+          <div>
+            <p className="font-extrabold text-xs">Fila de Prioridade AlfaMais Concluída</p>
+            <p className="text-[11px] opacity-90">
+              Todas as turmas abrangidas pelo programa AlfaMais (Pré I, II, 1º e 2º Ano) já foram preenchidas nesta escola. Os professores prioritários retornaram automaticamente para a <strong>Fila Geral por Pontuação</strong>.
+            </p>
           </div>
         </div>
       )}

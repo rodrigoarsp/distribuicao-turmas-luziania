@@ -84,22 +84,49 @@ export function hasAlfaMaisPriority(teacher) {
 }
 
 /**
+ * Verifica se uma turma se enquadra na prioridade do Programa AlfaMais Goiás (Art. 4º):
+ * Pré I, Pré II, 1º Ano e 2º Ano do Ensino Fundamental.
+ */
+export function isTurmaAlfaMais(turma) {
+  if (!turma) return false;
+  return Boolean(
+    turma.eh_alfamais || 
+    ['pre_1', 'pre_2', '1_ano', '2_ano'].includes(turma.tipo) || 
+    turma.tipo?.includes('1_ano') || 
+    turma.tipo?.includes('2_ano') || 
+    turma.tipo?.includes('pre') ||
+    turma.descricao?.includes('1º') || 
+    turma.descricao?.includes('2º') || 
+    turma.descricao?.toLowerCase().includes('pré')
+  );
+}
+
+/**
  * Retorna a fila combinada de chamada para escolha de turmas:
  * 1º Bloco: Professores com Prioridade AlfaMais (que ainda NÃO abdicaram e NÃO escolheram).
  * 2º Bloco: Fila Geral por Pontuação / Desempate (professores sem prioridade + professores prioritários que abdicaram).
  * 
- * Regra do Art. 4º: Se um professor prioritário optar por não escolher turma AlfaMais (Pré I, II, 1º e 2º ano),
- * ele abdica do seu turno prioritário inicial e retorna para a Fila Geral de classificação normal.
+ * Regra do Art. 4º: Se não houver mais turmas AlfaMais disponíveis na escola,
+ * os professores com prioridade voltam AUTOMATICAMENTE para a Fila Geral de classificação normal.
  */
-export function buildCallQueue(teachers, escolhas = [], abdicaramAlfaMais = []) {
+export function buildCallQueue(teachers, escolhas = [], abdicaramAlfaMais = [], turmas = []) {
   const rankedAll = sortAndRankTeachers(teachers);
 
-  // Professores com prioridade AlfaMais que ainda não escolheram e não abdicaram
-  const prioGroup = rankedAll.filter((t) => {
-    const jaEscolheu = escolhas.some((e) => e.professor_id === t.id);
-    const abdicou = abdicaramAlfaMais.includes(t.id);
-    return hasAlfaMaisPriority(t) && !jaEscolheu && !abdicou;
+  // Se houver turmas passadas, verifica se ainda existe alguma turma AlfaMais DISPONÍVEL
+  const totalAlfaMaisTurmas = turmas.filter((t) => isTurmaAlfaMais(t));
+  const hasAvailableAlfaMaisTurmas = turmas.length === 0 || totalAlfaMaisTurmas.some((t) => {
+    return !escolhas.some((e) => e.turma_id === t.id);
   });
+
+  // Se NÃO houver mais turmas AlfaMais disponíveis na escola,
+  // os professores com prioridade voltam automaticamente para a Fila Geral normal.
+  const prioGroup = hasAvailableAlfaMaisTurmas
+    ? rankedAll.filter((t) => {
+        const jaEscolheu = escolhas.some((e) => e.professor_id === t.id);
+        const abdicou = abdicaramAlfaMais.includes(t.id);
+        return hasAlfaMaisPriority(t) && !jaEscolheu && !abdicou;
+      })
+    : [];
 
   // Fila Geral: Todos os que ainda não escolheram e não estão no grupo de prioridade atual
   const generalGroup = rankedAll.filter((t) => {
@@ -108,10 +135,14 @@ export function buildCallQueue(teachers, escolhas = [], abdicaramAlfaMais = []) 
     return !jaEscolheu && !estaNoPrioGroup;
   });
 
+  const allAlfaMaisTaken = turmas.length > 0 && totalAlfaMaisTurmas.length > 0 && !hasAvailableAlfaMaisTurmas;
+
   return {
     prioGroup,
     generalGroup,
     fullCallQueue: [...prioGroup, ...generalGroup],
-    alreadyChosen: rankedAll.filter((t) => escolhas.some((e) => e.professor_id === t.id))
+    alreadyChosen: rankedAll.filter((t) => escolhas.some((e) => e.professor_id === t.id)),
+    hasAvailableAlfaMaisTurmas,
+    allAlfaMaisTaken
   };
 }
