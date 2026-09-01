@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { DatePicker } from '../common/DatePicker';
+import { NumericCalculatorModal } from '../common/NumericCalculatorModal';
 import { Plus, Trash2, Award, BookOpen, Clock, FileCheck, Check, GraduationCap, Monitor, BarChart3, Calendar, Calculator, X } from 'lucide-react';
 import { calculateTeacherScore } from '../../services/scoringEngine';
 
@@ -43,6 +44,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
 
   const [calculatedPreview, setCalculatedPreview] = useState(0);
   const [showCalcModal, setShowCalcModal] = useState(false);
+  const [showNumericCalcModal, setShowNumericCalcModal] = useState(false);
   const [calcStartDate, setCalcStartDate] = useState('');
   const [calcEndDate, setCalcEndDate] = useState('');
 
@@ -631,9 +633,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                     }
                   }}
                   className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                  title="Usar Calculadora de Período por Datas"
+                  title="Usar Calculadora de Período por Datas (Art. 2º, VI)"
                 >
-                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
+                  <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora de Datas
                 </button>
                 <button
                   type="button"
@@ -721,9 +723,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="flex items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
-                  onClick={() => setShowCalcModal(true)}
+                  onClick={() => setShowNumericCalcModal(true)}
                   className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                  title="Usar Calculadora de Datas"
+                  title="Abrir Calculadora Numérica"
                 >
                   <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
                 </button>
@@ -825,9 +827,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="flex items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
-                  onClick={() => setShowCalcModal(true)}
+                  onClick={() => setShowNumericCalcModal(true)}
                   className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                  title="Usar Calculadora de Datas"
+                  title="Abrir Calculadora Numérica"
                 >
                   <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
                 </button>
@@ -982,9 +984,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="flex items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
-                  onClick={() => setShowCalcModal(true)}
+                  onClick={() => setShowNumericCalcModal(true)}
                   className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                  title="Usar Calculadora de Datas"
+                  title="Abrir Calculadora Numérica"
                 >
                   <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
                 </button>
@@ -1126,9 +1128,9 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="flex items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
-                  onClick={() => setShowCalcModal(true)}
+                  onClick={() => setShowNumericCalcModal(true)}
                   className="text-xs text-[#003399] dark:text-blue-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                  title="Usar Calculadora de Datas"
+                  title="Abrir Calculadora Numérica"
                 >
                   <Calculator className="w-3.5 h-3.5 text-[#003399] dark:text-blue-400" /> Calculadora
                 </button>
@@ -1246,6 +1248,11 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           </div>
         </div>
       )}
+      {/* MODAL CALCULADORA NUMÉRICA PADRÃO */}
+      <NumericCalculatorModal
+        isOpen={showNumericCalcModal}
+        onClose={() => setShowNumericCalcModal(false)}
+      />
     </Modal>
   );
 }
