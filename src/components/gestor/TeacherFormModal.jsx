@@ -407,12 +407,12 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
         {/* SEÇÃO I – TEMPO DE SERVIÇO POR MATRÍCULA/ANO (REGÊNCIAS E CARGOS) */}
-        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3">
+        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3 max-w-full overflow-hidden">
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-theme-main">
               <Clock className="w-4 h-4 text-[#003399] dark:text-blue-400" /> SEÇÃO I - Regências & Tempo de Serviço (Calculado em Anos)
             </h4>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-black text-[#006633] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-lg border border-emerald-300 dark:border-emerald-800 shadow-xs">
                   Parcial Seção I: {detalhamento.secaoI_tempoServico || 0} pts
@@ -424,7 +424,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <button
                 type="button"
                 onClick={addRegencia}
-                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap"
+                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Adicionar Regência
               </button>
@@ -649,13 +649,13 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
         {/* PUBLICAÇÃO NA ÁREA DA EDUCAÇÃO */}
-        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3">
+        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3 max-w-full overflow-hidden">
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-theme-main">
               <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> PUBLICAÇÃO NA ÁREA DA EDUCAÇÃO
             </h4>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-black text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-lg border border-emerald-300 dark:border-emerald-800 shadow-xs">
                   Parcial Publicações: {detalhamento.secaoII_publicacoes || 0} pts
                 </span>
@@ -666,7 +666,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <button
                 type="button"
                 onClick={addPublicacao}
-                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap"
+                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Adicionar Publicação
               </button>
@@ -681,41 +681,47 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               const pubPts = detalhamento.publicacoesBreakdown?.[idx]?.pontos || 0;
 
               return (
-                <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme">
-                  <input
-                    type="text"
-                    placeholder="Título do trabalho, livro ou artigo..."
-                    value={pub.titulo}
-                    onChange={(e) => {
-                      const copy = [...formData.publicacoes];
-                      copy[idx].titulo = e.target.value;
-                      setFormData({ ...formData, publicacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full"
-                  />
-                  <select
-                    value={pub.tipo}
-                    onChange={(e) => {
-                      const copy = [...formData.publicacoes];
-                      copy[idx].tipo = e.target.value;
-                      setFormData({ ...formData, publicacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main"
-                  >
-                    <option value="tecnica_pedagogica">a) Atividades Técnicas/Pedagógicas/Projetos (50 pts/título)</option>
-                    <option value="artigo_issn">b) Artigos Qualis ou ISSN (100 pts/título)</option>
-                    <option value="livro_isbn">c) Autor/Coautor de Livros ISBN (200 pts/título)</option>
-                  </select>
-                  <span className="w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black text-emerald-700 dark:text-emerald-400 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 shrink-0">
-                    = {pubPts} pts
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removePublicacao(idx)}
-                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                <div key={idx} className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2.5 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme w-full max-w-full overflow-hidden shadow-2xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 min-w-0">
+                    <input
+                      type="text"
+                      placeholder="Título do trabalho, livro ou artigo..."
+                      value={pub.titulo}
+                      onChange={(e) => {
+                        const copy = [...formData.publicacoes];
+                        copy[idx].titulo = e.target.value;
+                        setFormData({ ...formData, publicacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full min-w-0"
+                    />
+                    <select
+                      value={pub.tipo}
+                      onChange={(e) => {
+                        const copy = [...formData.publicacoes];
+                        copy[idx].tipo = e.target.value;
+                        setFormData({ ...formData, publicacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-medium min-w-0 max-w-full xl:max-w-xs truncate"
+                    >
+                      <option value="tecnica_pedagogica">a) Atividades Técnicas/Pedagógicas/Projetos (50 pts/título)</option>
+                      <option value="artigo_issn">b) Artigos Qualis ou ISSN (100 pts/título)</option>
+                      <option value="livro_isbn">c) Autor/Coautor de Livros ISBN (200 pts/título)</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center justify-between xl:justify-end gap-2.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-200/80 dark:border-slate-700/60">
+                    <span className="w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black text-emerald-700 dark:text-emerald-400 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 shrink-0">
+                      = {pubPts} pts
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removePublicacao(idx)}
+                      className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer shrink-0"
+                      title="Remover Publicação"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -741,13 +747,13 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
         {/* SEÇÃO II – FORMAÇÃO PEDAGÓGICA / TITULAÇÃO PRESENCIAL */}
-        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3">
+        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3 max-w-full overflow-hidden">
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-theme-main">
               <GraduationCap className="w-4 h-4 text-purple-600 dark:text-purple-400" /> SEÇÃO II - Titulação Presencial (Pós, Mestrado, Doutorado)
             </h4>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-black text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/80 px-2.5 py-0.5 rounded-lg border border-purple-300 dark:border-purple-800 shadow-xs">
                   Parcial Seção II: {detalhamento.secaoIII_titulos || 0} pts
                 </span>
@@ -759,7 +765,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 type="button"
                 disabled={latoCount >= 4 && mestradoCount >= 2 && doutoradoCount >= 1}
                 onClick={addTitulacao}
-                className={`text-xs font-bold flex items-center gap-1 whitespace-nowrap ${
+                className={`text-xs font-bold flex items-center gap-1 whitespace-nowrap shrink-0 ${
                   latoCount >= 4 && mestradoCount >= 2 && doutoradoCount >= 1
                     ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
                     : 'text-[#006633] dark:text-emerald-400 hover:underline cursor-pointer'
@@ -779,47 +785,53 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               let itemPts = tit.tipo === 'lato_sensu' ? 50 : tit.tipo === 'mestrado' ? 200 : 300;
 
               return (
-                <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme">
-                  <input
-                    type="text"
-                    placeholder="Nome do curso / Instituição..."
-                    value={tit.nome_curso}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      copy[realIndex].nome_curso = e.target.value;
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full"
-                  />
-                  <select
-                    value={tit.tipo}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      copy[realIndex].tipo = e.target.value;
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-semibold"
-                  >
-                    <option value="lato_sensu" disabled={latoCount >= 4 && tit.tipo !== 'lato_sensu'}>
-                      a) Pós Lato-Sensu (min 360h) - 50 pts (máx 4) {latoCount >= 4 && tit.tipo !== 'lato_sensu' ? '⛔ (Máx 4 Atingido)' : ''}
-                    </option>
-                    <option value="mestrado" disabled={mestradoCount >= 2 && tit.tipo !== 'mestrado'}>
-                      b) Mestrado Stricto-Sensu - 200 pts (máx 2) {mestradoCount >= 2 && tit.tipo !== 'mestrado' ? '⛔ (Máx 2 Atingido)' : ''}
-                    </option>
-                    <option value="doutorado" disabled={doutoradoCount >= 1 && tit.tipo !== 'doutorado'}>
-                      c) Doutorado Stricto-Sensu - 300 pts (máx 1) {doutoradoCount >= 1 && tit.tipo !== 'doutorado' ? '⛔ (Máx 1 Atingido)' : ''}
-                    </option>
-                  </select>
-                  <span className="w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800 shrink-0">
-                    = {itemPts} pts
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeFormacao(realIndex)}
-                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                <div key={idx} className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2.5 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme w-full max-w-full overflow-hidden shadow-2xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 min-w-0">
+                    <input
+                      type="text"
+                      placeholder="Nome do curso / Instituição..."
+                      value={tit.nome_curso}
+                      onChange={(e) => {
+                        const copy = [...formData.formacoes];
+                        copy[realIndex].nome_curso = e.target.value;
+                        setFormData({ ...formData, formacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full min-w-0"
+                    />
+                    <select
+                      value={tit.tipo}
+                      onChange={(e) => {
+                        const copy = [...formData.formacoes];
+                        copy[realIndex].tipo = e.target.value;
+                        setFormData({ ...formData, formacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-semibold min-w-0 max-w-full xl:max-w-xs truncate"
+                    >
+                      <option value="lato_sensu" disabled={latoCount >= 4 && tit.tipo !== 'lato_sensu'}>
+                        a) Pós Lato-Sensu (min 360h) - 50 pts (máx 4) {latoCount >= 4 && tit.tipo !== 'lato_sensu' ? '⛔ (Máx 4 Atingido)' : ''}
+                      </option>
+                      <option value="mestrado" disabled={mestradoCount >= 2 && tit.tipo !== 'mestrado'}>
+                        b) Mestrado Stricto-Sensu - 200 pts (máx 2) {mestradoCount >= 2 && tit.tipo !== 'mestrado' ? '⛔ (Máx 2 Atingido)' : ''}
+                      </option>
+                      <option value="doutorado" disabled={doutoradoCount >= 1 && tit.tipo !== 'doutorado'}>
+                        c) Doutorado Stricto-Sensu - 300 pts (máx 1) {doutoradoCount >= 1 && tit.tipo !== 'doutorado' ? '⛔ (Máx 1 Atingido)' : ''}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center justify-between xl:justify-end gap-2.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-200/80 dark:border-slate-700/60">
+                    <span className="w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800 shrink-0">
+                      = {itemPts} pts
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFormacao(realIndex)}
+                      className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer shrink-0"
+                      title="Remover Titulação"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -850,13 +862,13 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
         {/* SEÇÃO III – FORMAÇÃO PEDAGÓGICA CONTINUADA PRESENCIAL EM 2025 */}
-        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3">
+        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3 max-w-full overflow-hidden">
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-theme-main">
               <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" /> SEÇÃO III - Formação Continuada Presencial (2025)
             </h4>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-black text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-0.5 rounded-lg border border-blue-300 dark:border-blue-800 shadow-xs">
                   Parcial Seção III: {detalhamento.secaoIV_formacaoPresencial || 0} pts
                 </span>
@@ -867,7 +879,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <button
                 type="button"
                 onClick={addFormacaoPresencial}
-                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap cursor-pointer"
+                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Adicionar Curso Presencial
               </button>
@@ -887,96 +899,102 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               const isCategoryExhausted = hasCap && usedOther >= 100;
 
               return (
-                <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme">
-                  <input
-                    type="text"
-                    placeholder="Nome do curso / instituição..."
-                    value={curso.nome_curso}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      copy[realIndex].nome_curso = e.target.value;
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full"
-                  />
-                  <select
-                    value={curso.tipo}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      const newType = e.target.value;
-                      copy[realIndex].tipo = newType;
-                      const capNew = presencialCaps[newType];
-                      if (capNew) {
-                        const usedOtherNew = getPresencialCategoryHoursOtherRows(newType, realIndex);
-                        const remNew = Math.max(0, capNew - usedOtherNew);
-                        if (copy[realIndex].carga_horaria > remNew) {
-                          copy[realIndex].carga_horaria = remNew;
-                        }
-                      }
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-medium"
-                  >
-                    <option value="alfamais">a) AlfaMais Goiás (2 pts/h - sem limite)</option>
-                    <option value="alfabetizacao_presencial" disabled={getPresencialCategoryHoursOtherRows('alfabetizacao_presencial', realIndex) >= 100}>
-                      b) Alfabetização (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('alfabetizacao_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
-                    </option>
-                    <option value="ed_infantil_presencial" disabled={getPresencialCategoryHoursOtherRows('ed_infantil_presencial', realIndex) >= 100}>
-                      c) Educação Infantil (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('ed_infantil_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
-                    </option>
-                    <option value="ed_especial_presencial" disabled={getPresencialCategoryHoursOtherRows('ed_especial_presencial', realIndex) >= 100}>
-                      d) Educação Especial (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('ed_especial_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
-                    </option>
-                    <option value="palestras_smel" disabled={getPresencialCategoryHoursOtherRows('palestras_smel', realIndex) >= 100}>
-                      e) Palestras / Congressos SMEL (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('palestras_smel', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
-                    </option>
-                    <option value="outros_orgaos_publicos" disabled={getPresencialCategoryHoursOtherRows('outros_orgaos_publicos', realIndex) >= 100}>
-                      f) Outros Órgãos Públicos / SMEL (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('outros_orgaos_publicos', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
-                    </option>
-                    <option value="praxis_pedagogica">g) Educação Especial "Práxis Pedagógica" (2 pts/h - sem limite)</option>
-                    <option value="sintego">h) Formação Continuada SINTEGO (5 pts/h - sem limite)</option>
-                  </select>
-                  <div className="flex items-center gap-1 text-xs">
-                    <span className="text-theme-muted font-bold">Horas:</span>
+                <div key={idx} className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2.5 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme w-full max-w-full overflow-hidden shadow-2xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 min-w-0">
                     <input
-                      type="number"
-                      min="0"
-                      max={maxAllowed}
-                      value={curso.carga_horaria}
+                      type="text"
+                      placeholder="Nome do curso / instituição..."
+                      value={curso.nome_curso}
                       onChange={(e) => {
                         const copy = [...formData.formacoes];
-                        let val = Number(e.target.value);
-                        if (maxAllowed !== undefined && val > maxAllowed) {
-                          val = maxAllowed;
-                        }
-                        copy[realIndex].carga_horaria = val;
+                        copy[realIndex].nome_curso = e.target.value;
                         setFormData({ ...formData, formacoes: copy });
                       }}
-                      className="w-16 p-1.5 border border-theme rounded-lg text-xs bg-theme-surface text-theme-main font-bold"
-                      placeholder="40"
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full min-w-0"
                     />
+                    <select
+                      value={curso.tipo}
+                      onChange={(e) => {
+                        const copy = [...formData.formacoes];
+                        const newType = e.target.value;
+                        copy[realIndex].tipo = newType;
+                        const capNew = presencialCaps[newType];
+                        if (capNew) {
+                          const usedOtherNew = getPresencialCategoryHoursOtherRows(newType, realIndex);
+                          const remNew = Math.max(0, capNew - usedOtherNew);
+                          if (copy[realIndex].carga_horaria > remNew) {
+                            copy[realIndex].carga_horaria = remNew;
+                          }
+                        }
+                        setFormData({ ...formData, formacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-medium min-w-0 max-w-full xl:max-w-xs truncate"
+                    >
+                      <option value="alfamais">a) AlfaMais Goiás (2 pts/h - sem limite)</option>
+                      <option value="alfabetizacao_presencial" disabled={getPresencialCategoryHoursOtherRows('alfabetizacao_presencial', realIndex) >= 100}>
+                        b) Alfabetização (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('alfabetizacao_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
+                      </option>
+                      <option value="ed_infantil_presencial" disabled={getPresencialCategoryHoursOtherRows('ed_infantil_presencial', realIndex) >= 100}>
+                        c) Educação Infantil (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('ed_infantil_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
+                      </option>
+                      <option value="ed_especial_presencial" disabled={getPresencialCategoryHoursOtherRows('ed_especial_presencial', realIndex) >= 100}>
+                        d) Educação Especial (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('ed_especial_presencial', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
+                      </option>
+                      <option value="palestras_smel" disabled={getPresencialCategoryHoursOtherRows('palestras_smel', realIndex) >= 100}>
+                        e) Palestras / Congressos SMEL (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('palestras_smel', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
+                      </option>
+                      <option value="outros_orgaos_publicos" disabled={getPresencialCategoryHoursOtherRows('outros_orgaos_publicos', realIndex) >= 100}>
+                        f) Outros Órgãos Públicos / SMEL (2 pts/h, máx 200pts/100h) {getPresencialCategoryHoursOtherRows('outros_orgaos_publicos', realIndex) >= 100 ? '⛔ (Teto 100h Atingido)' : ''}
+                      </option>
+                      <option value="praxis_pedagogica">g) Educação Especial "Práxis Pedagógica" (2 pts/h - sem limite)</option>
+                      <option value="sintego">h) Formação Continuada SINTEGO (5 pts/h - sem limite)</option>
+                    </select>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className={`w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black px-2.5 py-1.5 rounded-lg border shrink-0 ${
-                      isCategoryExhausted || (hasCap && itemPts === 0 && Number(curso.carga_horaria) > 0)
-                        ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700'
-                        : 'text-blue-700 dark:text-blue-300 bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800'
-                    }`}>
-                      = {itemPts} pts
-                    </span>
-                    {isCategoryExhausted && (
-                      <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-1 rounded-md border border-amber-300 dark:border-amber-700 shrink-0">
-                        ⛔ Teto Atingido
+
+                  <div className="flex items-center justify-between xl:justify-end gap-2.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-200/80 dark:border-slate-700/60">
+                    <div className="flex items-center gap-1 text-xs">
+                      <span className="text-theme-muted font-bold">Horas:</span>
+                      <input
+                        type="number"
+                        min="0"
+                        max={maxAllowed}
+                        value={curso.carga_horaria}
+                        onChange={(e) => {
+                          const copy = [...formData.formacoes];
+                          let val = Number(e.target.value);
+                          if (maxAllowed !== undefined && val > maxAllowed) {
+                            val = maxAllowed;
+                          }
+                          copy[realIndex].carga_horaria = val;
+                          setFormData({ ...formData, formacoes: copy });
+                        }}
+                        className="w-16 p-1.5 border border-theme rounded-lg text-xs bg-theme-surface text-theme-main font-bold"
+                        placeholder="40"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className={`w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black px-2.5 py-1.5 rounded-lg border shrink-0 ${
+                        isCategoryExhausted || (hasCap && itemPts === 0 && Number(curso.carga_horaria) > 0)
+                          ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700'
+                          : 'text-blue-700 dark:text-blue-300 bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-800'
+                      }`}>
+                        = {itemPts} pts
                       </span>
-                    )}
+                      {isCategoryExhausted && (
+                        <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-1 rounded-md border border-amber-300 dark:border-amber-700 shrink-0">
+                          ⛔ Teto Atingido
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeFormacao(realIndex)}
+                      className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer shrink-0"
+                      title="Remover Curso"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeFormacao(realIndex)}
-                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               );
             })}
@@ -1002,13 +1020,13 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
         </div>
 
         {/* SEÇÃO IV – FORMAÇÃO PEDAGÓGICA CONTINUADA SEMI-PRESENCIAL E EAD EM 2025 */}
-        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3">
+        <div className="bg-theme-surface p-4 rounded-2xl border border-theme space-y-3 max-w-full overflow-hidden">
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-theme-main">
               <Monitor className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> SEÇÃO IV - Formação Semi-Presencial e EAD (2025)
             </h4>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-black text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-0.5 rounded-lg border border-indigo-300 dark:border-indigo-800 shadow-xs">
                   Parcial Seção IV: {detalhamento.secaoV_formacaoEAD || 0} pts
                 </span>
@@ -1019,7 +1037,7 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <button
                 type="button"
                 onClick={addFormacaoEAD}
-                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap cursor-pointer"
+                className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 whitespace-nowrap shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Adicionar Curso EAD
               </button>
@@ -1038,89 +1056,95 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               const isCategoryExhausted = usedOther >= 200;
 
               return (
-                <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme">
-                  <input
-                    type="text"
-                    placeholder="Nome do curso EAD..."
-                    value={curso.nome_curso}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      copy[realIndex].nome_curso = e.target.value;
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full"
-                  />
-                  <select
-                    value={curso.tipo}
-                    onChange={(e) => {
-                      const copy = [...formData.formacoes];
-                      const newType = e.target.value;
-                      copy[realIndex].tipo = newType;
-                      const remNew = Math.max(0, 200 - getEadCategoryHoursOtherRows(newType, realIndex));
-                      if (copy[realIndex].carga_horaria > remNew) {
-                        copy[realIndex].carga_horaria = remNew;
-                      }
-                      setFormData({ ...formData, formacoes: copy });
-                    }}
-                    className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-medium"
-                  >
-                    <option value="alfabetizacao_ead" disabled={getEadCategoryHoursOtherRows('alfabetizacao_ead', realIndex) >= 200}>
-                      a) Alfabetização EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('alfabetizacao_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
-                    </option>
-                    <option value="ed_infantil_ead" disabled={getEadCategoryHoursOtherRows('ed_infantil_ead', realIndex) >= 200}>
-                      b) Educação Infantil EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('ed_infantil_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
-                    </option>
-                    <option value="ed_especial_ead" disabled={getEadCategoryHoursOtherRows('ed_especial_ead', realIndex) >= 200}>
-                      c) Educação Especial EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('ed_especial_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
-                    </option>
-                    <option value="palestras_ead" disabled={getEadCategoryHoursOtherRows('palestras_ead', realIndex) >= 200}>
-                      d) Palestras/Seminários EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('palestras_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
-                    </option>
-                    <option value="outros_ead" disabled={getEadCategoryHoursOtherRows('outros_ead', realIndex) >= 200}>
-                      e) Particulares / Públicas EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('outros_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
-                    </option>
-                  </select>
-                  <div className="flex items-center gap-1 text-xs">
-                    <span className="text-theme-muted font-bold">Horas:</span>
+                <div key={idx} className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2.5 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-theme w-full max-w-full overflow-hidden shadow-2xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 min-w-0">
                     <input
-                      type="number"
-                      min="0"
-                      max={maxAllowed}
-                      value={curso.carga_horaria}
+                      type="text"
+                      placeholder="Nome do curso EAD..."
+                      value={curso.nome_curso}
                       onChange={(e) => {
                         const copy = [...formData.formacoes];
-                        let val = Number(e.target.value);
-                        if (val > maxAllowed) {
-                          val = maxAllowed;
-                        }
-                        copy[realIndex].carga_horaria = val;
+                        copy[realIndex].nome_curso = e.target.value;
                         setFormData({ ...formData, formacoes: copy });
                       }}
-                      className="w-16 p-1.5 border border-theme rounded-lg text-xs bg-theme-surface text-theme-main font-bold"
-                      placeholder="40"
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main flex-1 w-full min-w-0"
                     />
+                    <select
+                      value={curso.tipo}
+                      onChange={(e) => {
+                        const copy = [...formData.formacoes];
+                        const newType = e.target.value;
+                        copy[realIndex].tipo = newType;
+                        const remNew = Math.max(0, 200 - getEadCategoryHoursOtherRows(newType, realIndex));
+                        if (copy[realIndex].carga_horaria > remNew) {
+                          copy[realIndex].carga_horaria = remNew;
+                        }
+                        setFormData({ ...formData, formacoes: copy });
+                      }}
+                      className="text-xs p-2 border border-theme rounded-lg bg-theme-surface text-theme-main font-medium min-w-0 max-w-full xl:max-w-xs truncate"
+                    >
+                      <option value="alfabetizacao_ead" disabled={getEadCategoryHoursOtherRows('alfabetizacao_ead', realIndex) >= 200}>
+                        a) Alfabetização EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('alfabetizacao_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
+                      </option>
+                      <option value="ed_infantil_ead" disabled={getEadCategoryHoursOtherRows('ed_infantil_ead', realIndex) >= 200}>
+                        b) Educação Infantil EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('ed_infantil_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
+                      </option>
+                      <option value="ed_especial_ead" disabled={getEadCategoryHoursOtherRows('ed_especial_ead', realIndex) >= 200}>
+                        c) Educação Especial EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('ed_especial_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
+                      </option>
+                      <option value="palestras_ead" disabled={getEadCategoryHoursOtherRows('palestras_ead', realIndex) >= 200}>
+                        d) Palestras/Seminários EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('palestras_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
+                      </option>
+                      <option value="outros_ead" disabled={getEadCategoryHoursOtherRows('outros_ead', realIndex) >= 200}>
+                        e) Particulares / Públicas EAD (0,5 pt/h, máx 100pts/200h) {getEadCategoryHoursOtherRows('outros_ead', realIndex) >= 200 ? '⛔ (Teto 200h Atingido)' : ''}
+                      </option>
+                    </select>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className={`w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black px-2.5 py-1.5 rounded-lg border shrink-0 ${
-                      isCategoryExhausted || (itemPts === 0 && Number(curso.carga_horaria) > 0)
-                        ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700'
-                        : 'text-indigo-700 dark:text-indigo-300 bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800'
-                    }`}>
-                      = {itemPts} pts
-                    </span>
-                    {isCategoryExhausted && (
-                      <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-1 rounded-md border border-amber-300 dark:border-amber-700 shrink-0">
-                        ⛔ Teto Atingido
+
+                  <div className="flex items-center justify-between xl:justify-end gap-2.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-200/80 dark:border-slate-700/60">
+                    <div className="flex items-center gap-1 text-xs">
+                      <span className="text-theme-muted font-bold">Horas:</span>
+                      <input
+                        type="number"
+                        min="0"
+                        max={maxAllowed}
+                        value={curso.carga_horaria}
+                        onChange={(e) => {
+                          const copy = [...formData.formacoes];
+                          let val = Number(e.target.value);
+                          if (val > maxAllowed) {
+                            val = maxAllowed;
+                          }
+                          copy[realIndex].carga_horaria = val;
+                          setFormData({ ...formData, formacoes: copy });
+                        }}
+                        className="w-16 p-1.5 border border-theme rounded-lg text-xs bg-theme-surface text-theme-main font-bold"
+                        placeholder="40"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className={`w-[105px] min-w-[105px] text-center inline-flex items-center justify-center text-xs font-black px-2.5 py-1.5 rounded-lg border shrink-0 ${
+                        isCategoryExhausted || (itemPts === 0 && Number(curso.carga_horaria) > 0)
+                          ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700'
+                          : 'text-indigo-700 dark:text-indigo-300 bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800'
+                      }`}>
+                        = {itemPts} pts
                       </span>
-                    )}
+                      {isCategoryExhausted && (
+                        <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-1 rounded-md border border-amber-300 dark:border-amber-700 shrink-0">
+                          ⛔ Teto Atingido
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeFormacao(realIndex)}
+                      className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer shrink-0"
+                      title="Remover Curso"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeFormacao(realIndex)}
-                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               );
             })}
