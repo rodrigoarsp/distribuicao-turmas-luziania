@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
+import { DatePicker } from '../common/DatePicker';
 import { Plus, Trash2, Award, BookOpen, Clock, FileCheck, Check, GraduationCap, Monitor, BarChart3, Calendar, Calculator } from 'lucide-react';
 import { calculateTeacherScore } from '../../services/scoringEngine';
 
@@ -291,12 +292,12 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="h-5 flex items-center mb-1">
                 <label className="block text-xs font-semibold text-theme-muted whitespace-nowrap">Data Nascimento (Critério e) *</label>
               </div>
-              <input
-                type="date"
+              <DatePicker
                 required
                 value={formData.data_nascimento}
-                onChange={(e) => setFormData({ ...formData, data_nascimento: e.target.value })}
-                className="w-full px-3 py-2 text-xs border border-theme dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-[#006633] h-9"
+                onChange={(val) => setFormData({ ...formData, data_nascimento: val })}
+                minYear={1940}
+                maxYear={2026}
               />
             </div>
 
@@ -304,12 +305,12 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
               <div className="h-5 flex items-center mb-1">
                 <label className="block text-xs font-semibold text-theme-muted whitespace-nowrap">Data de Admissão *</label>
               </div>
-              <input
-                type="date"
+              <DatePicker
                 required
                 value={formData.data_admissao}
-                onChange={(e) => setFormData({ ...formData, data_admissao: e.target.value })}
-                className="w-full px-3 py-2 text-xs border border-theme dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-[#006633] h-9"
+                onChange={(val) => setFormData({ ...formData, data_admissao: val })}
+                minYear={1970}
+                maxYear={2026}
               />
             </div>
 
@@ -432,7 +433,8 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           {formData.regencias.length === 0 ? (
             <p className="text-xs text-theme-muted italic">Nenhuma regência cadastrada. Clique em "Adicionar Regência".</p>
           ) : (
-            formData.regencias.map((reg, idx) => {
+            <div className="space-y-2">
+              {formData.regencias.map((reg, idx) => {
               const periodInfo = calculatePeriodInfo(reg.data_inicio, reg.data_fim);
               const itemPts = detalhamento.regenciasBreakdown?.[idx]?.pontos || 0;
 
@@ -540,28 +542,28 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Data de Início (Dia / Mês / Ano) *</label>
-                          <input
-                            type="date"
+                          <DatePicker
                             value={reg.data_inicio || ''}
-                            onChange={(e) => {
+                            onChange={(val) => {
                               const copy = [...formData.regencias];
-                              copy[idx].data_inicio = e.target.value;
+                              copy[idx].data_inicio = val;
                               setFormData({ ...formData, regencias: copy });
                             }}
-                            className="w-full p-2 text-xs border border-blue-300 dark:border-blue-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#003399]"
+                            minYear={1970}
+                            maxYear={2026}
                           />
                         </div>
                         <div>
                           <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Data de Fim (Dia / Mês / Ano) *</label>
-                          <input
-                            type="date"
+                          <DatePicker
                             value={reg.data_fim || ''}
-                            onChange={(e) => {
+                            onChange={(val) => {
                               const copy = [...formData.regencias];
-                              copy[idx].data_fim = e.target.value;
+                              copy[idx].data_fim = val;
                               setFormData({ ...formData, regencias: copy });
                             }}
-                            className="w-full p-2 text-xs border border-blue-300 dark:border-blue-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#003399]"
+                            minYear={1970}
+                            maxYear={2026}
                           />
                         </div>
                       </div>
@@ -611,7 +613,17 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
 
                 </div>
               );
-            })
+            })}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={addRegencia}
+                  className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Adicionar Regência
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -643,7 +655,8 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           {formData.publicacoes.length === 0 ? (
             <p className="text-xs text-theme-muted italic">Nenhuma publicação cadastrada.</p>
           ) : (
-            formData.publicacoes.map((pub, idx) => {
+            <div className="space-y-2">
+              {formData.publicacoes.map((pub, idx) => {
               const pubPts = detalhamento.publicacoesBreakdown?.[idx]?.pontos || 0;
 
               return (
@@ -684,7 +697,17 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                   </button>
                 </div>
               );
-            })
+            })}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={addPublicacao}
+                  className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Adicionar Publicação
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -721,7 +744,8 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           {titulosPresenciais.length === 0 ? (
             <p className="text-xs text-theme-muted italic">Nenhuma titulação presencial cadastrada.</p>
           ) : (
-            titulosPresenciais.map((tit, idx) => {
+            <div className="space-y-2">
+              {titulosPresenciais.map((tit, idx) => {
               const realIndex = formData.formacoes.indexOf(tit);
               let itemPts = tit.tipo === 'lato_sensu' ? 50 : tit.tipo === 'mestrado' ? 200 : 300;
 
@@ -769,7 +793,22 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                   </button>
                 </div>
               );
-            })
+            })}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  disabled={latoCount >= 4 && mestradoCount >= 2 && doutoradoCount >= 1}
+                  onClick={addTitulacao}
+                  className={`text-xs font-bold flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg transition-colors ${
+                    latoCount >= 4 && mestradoCount >= 2 && doutoradoCount >= 1
+                      ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                      : 'text-[#006633] dark:text-emerald-400 hover:underline hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                  }`}
+                >
+                  <Plus className="w-3.5 h-3.5" /> Adicionar Titulação
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -801,7 +840,8 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           {cursosPresenciais.length === 0 ? (
             <p className="text-xs text-theme-muted italic">Nenhum curso presencial de 2025 cadastrado.</p>
           ) : (
-            cursosPresenciais.map((curso, idx) => {
+            <div className="space-y-2">
+              {cursosPresenciais.map((curso, idx) => {
               const realIndex = formData.formacoes.indexOf(curso);
               const itemPts = detalhamento.presencialBreakdown?.[idx]?.pontos || 0;
               const hasCap = presencialCaps[curso.tipo] !== undefined;
@@ -902,7 +942,17 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                   </button>
                 </div>
               );
-            })
+            })}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={addFormacaoPresencial}
+                  className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Adicionar Curso Presencial
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -934,7 +984,8 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
           {cursosEAD.length === 0 ? (
             <p className="text-xs text-theme-muted italic">Nenhum curso EAD / semipresencial cadastrado.</p>
           ) : (
-            cursosEAD.map((curso, idx) => {
+            <div className="space-y-2">
+              {cursosEAD.map((curso, idx) => {
               const realIndex = formData.formacoes.indexOf(curso);
               const itemPts = detalhamento.eadBreakdown?.[idx]?.pontos || 0;
               const usedOther = getEadCategoryHoursOtherRows(curso.tipo, realIndex);
@@ -1027,7 +1078,17 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                   </button>
                 </div>
               );
-            })
+            })}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={addFormacaoEAD}
+                  className="text-xs text-[#006633] dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Adicionar Curso EAD
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
