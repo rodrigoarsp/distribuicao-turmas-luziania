@@ -90,12 +90,14 @@ export function DatePicker({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Scroll active year into view when year picker opens
+  // Scroll active year into view internally without scrolling the parent modal or page
   useEffect(() => {
     if (viewMode === 'years' && yearListRef.current) {
       const activeEl = yearListRef.current.querySelector('[data-active="true"]');
       if (activeEl) {
-        activeEl.scrollIntoView({ block: 'center' });
+        const container = yearListRef.current;
+        const top = activeEl.offsetTop - container.clientHeight / 2 + activeEl.clientHeight / 2;
+        container.scrollTop = Math.max(0, top);
       }
     }
   }, [viewMode]);
