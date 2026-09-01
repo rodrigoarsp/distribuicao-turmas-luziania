@@ -92,6 +92,7 @@ export function ClassFormModal({ isOpen, onClose, onSave, classToEdit }) {
             onChange={(e) => handleTipoChange(e.target.value)}
             className="w-full px-3 py-2 text-xs border border-theme dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-[#006633]"
           >
+            <option value="creche_1_4">Creche 1 ao 4</option>
             <option value="pre_i">Pré-Escola I (AlfaMais)</option>
             <option value="pre_ii">Pré-Escola II (AlfaMais)</option>
             <option value="1_ano">1º Ano Ensino Fundamental (AlfaMais)</option>

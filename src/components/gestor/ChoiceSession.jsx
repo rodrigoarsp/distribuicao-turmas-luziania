@@ -325,7 +325,7 @@ export function ChoiceSession() {
                       </div>
 
                       <h4 className="text-base font-extrabold text-theme-main">{turma.descricao}</h4>
-                      <p className="text-xs text-theme-muted capitalize mb-4">Etapa: {turma.tipo.replace('_', ' ')}</p>
+                      <p className="text-xs text-theme-muted mb-4">Etapa: <strong className="capitalize">{turma.tipo === 'creche_1_4' ? 'Creche 1 ao 4' : turma.tipo.replace(/_/g, ' ')}</strong></p>
                     </div>
 
                     <button

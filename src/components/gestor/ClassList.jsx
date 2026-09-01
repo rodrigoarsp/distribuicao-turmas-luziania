@@ -113,8 +113,8 @@ export function ClassList() {
                   <h4 className="text-base font-extrabold text-theme-main mb-1 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-[#006633] dark:text-emerald-400" /> {turma.descricao}
                   </h4>
-                  <p className="text-xs text-theme-muted capitalize mb-4">
-                    Etapa: {turma.tipo.replace('_', ' ')} • Ano Letivo: {turma.ano_letivo}
+                  <p className="text-xs text-theme-muted mb-4">
+                    Etapa: <strong className="capitalize">{turma.tipo === 'creche_1_4' ? 'Creche 1 ao 4' : turma.tipo.replace(/_/g, ' ')}</strong> • Ano Letivo: {turma.ano_letivo}
                   </p>
 
                   {/* Status de Ocupação */}
