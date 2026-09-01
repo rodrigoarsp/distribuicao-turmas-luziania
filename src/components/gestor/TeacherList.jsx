@@ -50,17 +50,9 @@ export function TeacherList() {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Filter className="w-4 h-4 text-theme-muted" />
-            <select
-              value={filterVinculo}
-              onChange={(e) => setFilterVinculo(e.target.value)}
-              className="text-xs py-2.5 px-3 border border-theme rounded-xl bg-theme-surface font-semibold text-theme-main"
-            >
-              <option value="todos">Todos os Vínculos</option>
-              <option value="efetivo">Efetivos</option>
-              <option value="contrato_temporario">Contrato Temporário</option>
-              <option value="comissionado">Comissionados / SME</option>
-            </select>
+            <span className="text-xs font-extrabold text-[#006633] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-2xs">
+              🎓 Vínculo: <strong>Professores Efetivos</strong>
+            </span>
           </div>
         </div>
 

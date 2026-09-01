@@ -339,13 +339,12 @@ export function TeacherFormModal({ isOpen, onClose, onSave, teacherToEdit }) {
                 <label className="block text-xs font-semibold text-theme-muted whitespace-nowrap">Tipo de Vínculo *</label>
               </div>
               <select
-                value={formData.tipo_vinculo}
-                onChange={(e) => setFormData({ ...formData, tipo_vinculo: e.target.value })}
-                className="w-full px-3 py-2 text-xs border border-theme dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-[#006633] h-9"
+                disabled
+                value="efetivo"
+                className="w-full px-3 py-2 text-xs border border-theme bg-slate-100 dark:bg-slate-800/80 text-theme-main rounded-xl font-bold h-9 cursor-not-allowed"
+                title="Processo exclusivo para Professores Efetivos da Rede Municipal"
               >
                 <option value="efetivo">Professor Efetivo</option>
-                <option value="contrato_temporario">Contrato Temporário</option>
-                <option value="comissionado">Cargo Comissionado / SME</option>
               </select>
             </div>
 

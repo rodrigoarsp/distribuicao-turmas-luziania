@@ -2514,7 +2514,7 @@ export const INITIAL_PROFESSORES = [
     data_nascimento: '1995-01-05',
     data_admissao: '2021-02-15',
     carga_horaria: 20,
-    tipo_vinculo: 'contrato_temporario',
+    tipo_vinculo: 'efetivo',
     faltas_injustificadas_2025: 0,
     frequencia_alfamais_percentual: 91.0,
     status_validacao: 'validado',
