@@ -320,7 +320,14 @@ export function AppProvider({ children }) {
     if (escolha) {
       setTurmas((prev) => prev.map((t) => (t.id === escolha.turma_id ? { ...t, status: 'disponivel' } : t)));
       setEscolhas((prev) => prev.filter((e) => e.id !== escolhaId));
-      logAction('Cancelamento / Exclusão de Escolha de Turma', { escolha_id: escolhaId });
+
+      // Restaura prioridade AlfaMais do professor caso tenha sido excluído da turma
+      if (escolha.professor_id) {
+        setAbdicaramAlfaMais((prev) => prev.filter((id) => id !== escolha.professor_id));
+      }
+
+      const prof = professores.find((p) => p.id === escolha.professor_id);
+      logAction('Cancelamento / Exclusão de Escolha de Turma', { escolha_id: escolhaId, professor: prof?.nome });
     }
   };
 
@@ -332,6 +339,11 @@ export function AppProvider({ children }) {
 
   const reopenSchoolProcess = (escolaId) => {
     setEscolas((prev) => prev.map((e) => (e.id === escolaId ? { ...e, status_processo: 'em_andamento' } : e)));
+    
+    // Restaura a prioridade AlfaMais dos professores da escola reaberta
+    const schoolProfIds = professores.filter((p) => p.escola_id === escolaId).map((p) => p.id);
+    setAbdicaramAlfaMais((prev) => prev.filter((id) => !schoolProfIds.includes(id)));
+
     const escola = escolas.find((e) => e.id === escolaId);
     logAction('Reabertura do Processo de Escolha para Ajustes', { escola: escola?.nome });
   };

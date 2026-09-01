@@ -689,7 +689,7 @@ export function ChoiceSession() {
                 Confirma o cancelamento da escolha da turma <strong>{deleteChoiceModal.turma?.descricao}</strong> para o(a) professor(a) <strong>{deleteChoiceModal.prof.nome}</strong>?
               </p>
               <p className="text-[11px]">
-                A turma será liberada e ficará disponível novamente para escolha no painel principal.
+                A turma será liberada e ficará disponível novamente para escolha. O(A) professor(a) retornará à lista de chamada preservando sua prioridade AlfaMais (Art. 4º).
               </p>
             </div>
 
