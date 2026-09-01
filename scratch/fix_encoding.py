@@ -1,0 +1,206 @@
+import json
+import re
+
+with open("c:/Users/rodri/.gemini/antigravity-ide/scratch/distribuicao-turmas-luziania/scratch/escolas_parsed.json", "r", encoding="utf-8") as f:
+    escolas = json.load(f)
+
+# Encoding replacement fixes for Portuguese text with corrupted 
+replacements = [
+    ("1 ESCOLA", "1ª ESCOLA"),
+    ("2 ESCOLA", "2ª ESCOLA"),
+    ("3 ESCOLA", "3ª ESCOLA"),
+    ("4 ESCOLA", "4ª ESCOLA"),
+    ("5 ESCOLA", "5ª ESCOLA"),
+    ("6 ESCOLA", "6ª ESCOLA"),
+    ("1 ANO", "1º ANO"),
+    ("2 ANO", "2º ANO"),
+    ("3 ANO", "3º ANO"),
+    ("4 ANO", "4º ANO"),
+    ("5 ANO", "5º ANO"),
+    ("6 ANO", "6º ANO"),
+    ("7 ANO", "7º ANO"),
+    ("8 ANO", "8º ANO"),
+    ("9 ANO", "9º ANO"),
+    ("6 AO 9 ANO", "6º AO 9º ANO"),
+    ("PR-ESCOLA", "PRÉ-ESCOLA"),
+    ("EDUCAO", "EDUCAÇÃO"),
+    ("LUZINIA", "LUZIÂNIA"),
+    ("ING", "INGÁ"),
+    ("CONVNIO", "CONVÊNIO"),
+    ("POSSUI CONVNIO", "POSSUI CONVÊNIO"),
+    ("REDE PBLICA", "REDE PÚBLICA"),
+    ("MUNICPIO", "MUNICÍPIO"),
+    ("CDIGO", "CÓDIGO"),
+    ("CLASSIFICAO", "CLASSIFICAÇÃO"),
+    ("CONDIO", "CONDIÇÃO"),
+    ("INSTRUO", "INSTRUÇÃO"),
+    ("SITUAO", "SITUAÇÃO"),
+    ("NMERO", "NÚMERO"),
+    ("LOCALIZAO", "LOCALIZAÇÃO"),
+    ("RGAO", "ÓRGÃO"),
+    ("RGO", "ÓRGÃO"),
+    ("RGOS", "ÓRGÃOS"),
+    ("ADMINISTRAO", "ADMINISTRAÇÃO"),
+    ("INSTITUIES", "INSTITUIÇÕES"),
+    ("REGULAMENTAO", "REGULAMENTAÇÃO"),
+    ("AUTORIZAO", "AUTORIZAÇÃO"),
+    ("VINCULADA ", "VINCULADA À"),
+    ("TCNICO", "TÉCNICO"),
+    ("INFORMTICA", "INFORMÁTICA"),
+    ("PORTTEIS", "PORTÁTEIS"),
+    ("SOCIO CULTURAIS", "SOCIOCULTURAIS"),
+    ("PEDAGGICOS", "PEDAGÓGICOS"),
+    ("APRENDIZAGEM", "APRENDIZAGEM"),
+    ("PRDIO", "PRÉDIO"),
+    ("PRPRIO", "PRÓPRIO"),
+    ("OCUPAO", "OCUPAÇÃO"),
+    ("DEVOLUO", "DEVOLUÇÃO"),
+    ("DELIMITAO", "DELIMITAÇÃO"),
+    ("REA", "ÁREA"),
+    ("TELEVISAO", "TELEVISÃO"),
+    ("MULTIMDIA", "MULTIMÍDIA"),
+    ("COMPUTADORES DE MESA", "COMPUTADORES DE MESA"),
+    ("AGUA", "ÁGUA"),
+    ("GUA", "ÁGUA"),
+    ("ELTRICA", "ELÉTRICA"),
+    ("SANITRIO", "SANITÁRIO"),
+    ("DESTINAO", "DESTINAÇÃO"),
+    ("RESDUOS", "RESÍDUOS"),
+    ("SEPARAO", "SEPARAÇÃO"),
+    ("REUTILIZAO", "REUTILIZAÇÃO"),
+    ("RECURSOS DE ACESSIBILIDADE", "RECURSOS DE ACESSIBILIDADE"),
+    ("DEFICINCIA", "DEFICIÊNCIA"),
+    ("REDUZIDA", "REDUZIDA"),
+    ("CIRCULAO", "CIRCULAÇÃO"),
+    ("INDGENA", "INDÍGENA"),
+    ("LNGUA", "LÍNGUA"),
+    ("SELEO", "SELEÇÃO"),
+    ("ESPECFICOS", "ESPECÍFICOS"),
+    ("SECRETRIO", "SECRETÁRIO"),
+    ("SECRETRIA", "SECRETÁRIA"),
+    ("MARIA", "MARÍLIA"),
+    ("CNDIDO", "CÂNDIDO"),
+    ("CLUDIA", "CLÁUDIA"),
+    ("ANDR", "ANDRÉ"),
+    ("MNICA", "MÔNICA"),
+    ("ARAJO", "ARAÚJO"),
+    ("CLIA", "CÉLIA"),
+    ("INCIO", "INÁCIO"),
+    ("S", "SÁ"),
+    ("FRANA", "FRANÇA"),
+    ("CONCEIO", "CONCEIÇÃO"),
+    ("FRANA", "FRANÇA"),
+    ("NOGUEIRA", "NOGUEIRA"),
+    ("SEBASTIO", "SEBASTIÃO"),
+    ("JOS", "JOSÉ"),
+    ("VALRIA", "VALÉRIA"),
+    ("PROLA", "PÉROLA"),
+    ("PROLA", "PÉROLA"),
+    ("LÚCIA", "LÚCIA"),
+    ("LCIA", "LÚCIA"),
+    ("GARCA", "GARCIA"),
+    ("ESPRITA", "ESPÍRITA"),
+    ("EUGNIA", "EUGÊNIA"),
+    ("MAURCIO", "MAURÍCIO"),
+    ("BELM", "BELÉM"),
+    ("FALCO", "FALCÃO"),
+    ("VELSO", "VELÔSO"),
+    ("NATLIA", "NATÁLIA"),
+    ("LLIA", "LÍLIA"),
+    ("AZEVEDO", "AZEVEDO"),
+    ("CSIA", "CÁSSIA"),
+    ("CSSIA", "CÁSSIA"),
+    ("DARC", "D'ARC"),
+    ("D'ARC", "D'ARC"),
+    ("MARCLIO", "MARCÍLIO"),
+    ("MENDONA", "MENDONÇA"),
+    ("AGUPITO", "AGÁPITO"),
+    ("AGPITO", "AGÁPITO"),
+    ("MARRA", "MARRA"),
+    ("HORTNCIA", "HORTÊNCIA"),
+    ("FELCIO", "FELÁCIO"),
+    ("FELACIO", "FELÁCIO"),
+    ("PALHOA", "PALHOÇA"),
+    ("EDUCANDRIO", "EDUCANDÁRIO"),
+    ("NAZAR", "NAZARÉ"),
+    ("MANSES", "MANSÕES"),
+    ("PRACA", "PRAÇA"),
+    ("PRAA", "PRAÇA"),
+    ("AVENIDA", "AVENIDA"),
+    ("AMRICA", "AMÉRICA"),
+    ("SO", "SÃO"),
+    ("F", "FÉ"),
+    ("TRS", "TRÊS"),
+    ("TRES", "TRÊS"),
+    ("SIMO", "SIMÃO"),
+    ("JOO", "JOÃO"),
+    ("PAULO", "PAULO"),
+    ("GONALVES", "GONÇALVES"),
+    ("CMARA", "CÂMARA"),
+    ("ROSRIO", "ROSÁRIO"),
+    ("BENEDITO", "BENEDITO"),
+    ("POMPIA", "POMPÉIA"),
+    ("BRASLIA", "BRASÍLIA"),
+    ("MANDU", "MANDU"),
+    ("KUBITSCHEK", "KUBITSCHEK"),
+    ("CARABAS", "CARAÍBAS"),
+    ("CARAIBAS", "CARAÍBAS"),
+    ("ZIO", "ÉZIO"),
+    ("EZIO", "ÉZIO"),
+    ("AEROPORTO", "AEROPORTO"),
+    ("FLAMBOYANT", "FLAMBOYANT"),
+    ("OSFAYA", "OSFAYA"),
+    ("ALVORADA", "ALVORADA"),
+    ("ESTRELA DALVA", "ESTRELA DALVA"),
+    ("SERRINHA", "SERRINHA"),
+    ("CRUZEIRO DO SUL", "CRUZEIRO DO SUL"),
+    ("SOL NASCENTE", "SOL NASCENTE"),
+    ("FUMAL", "FUMAL"),
+    ("VIEGAS", "VIEGAS"),
+    ("JARDIM", "JARDIM"),
+    ("PARQUE", "PARQUE"),
+    ("SETOR", "SETOR"),
+    ("DISTRITO", "DISTRITO"),
+    ("INDUSTRIAL", "INDUSTRIAL"),
+    ("VILA", "VILA"),
+    ("RECREIO", "RECREIO"),
+    ("MANSOES", "MANSÕES"),
+    ("RUA", "RUA"),
+    ("AVENIDA", "AVENIDA"),
+    ("ALAMEDA", "ALAMEDA"),
+    ("QUADRA", "QUADRA"),
+    ("LOTE", "LOTE"),
+    ("AREA", "ÁREA"),
+    ("ESPECIAL", "ESPECIAL"),
+]
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return text
+    
+    # Generic char replacements
+    text = text.replace("", "") # remove rogue unmappable char if standalone
+    for old, new in replacements:
+        text = text.replace(old, new)
+    
+    # Clean up double spaces or trailing punctuation
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+cleaned_escolas = []
+for e in escolas:
+    cleaned = {}
+    for k, v in e.items():
+        if isinstance(v, str):
+            cleaned[k] = clean_text(v)
+        else:
+            cleaned[k] = v
+    cleaned_escolas.append(cleaned)
+
+print(f"Cleaned {len(cleaned_escolas)} escolas!")
+print("Sample 1:", cleaned_escolas[0]["nome"])
+print("Sample 2:", cleaned_escolas[1]["nome"])
+
+with open("c:/Users/rodri/.gemini/antigravity-ide/scratch/distribuicao-turmas-luziania/scratch/escolas_cleaned.json", "w", encoding="utf-8") as out:
+    json.dump(cleaned_escolas, out, ensure_ascii=False, indent=2)
+
